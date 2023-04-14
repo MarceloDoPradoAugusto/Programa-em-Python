@@ -1,182 +1,122 @@
 import tkinter as tk
 
-# Funções de callback para os botões
-def selecionar_barramento_a():
-    barramento_atual.set("A")
-
-def selecionar_barramento_b():
-    barramento_atual.set("B")
-
-def somar():
-    barramento = barramento_atual.get()
-    valor = int(entry_valor.get())
-    if barramento == "A":
-        valor_atual = int(entry_r_a.get())
-        entry_r_a.delete(0, tk.END)
-        entry_r_a.insert(0, str(valor_atual + valor))
-    elif barramento == "B":
-        valor_atual = int(entry_r_b.get())
-        entry_r_b.delete(0, tk.END)
-        entry_r_b.insert(0, str(valor_atual + valor))
-
-def resetar():
-    entry_r_a.delete(0, tk.END)
-    entry_r_a.insert(0, "0")
-    entry_r_b.delete(0, tk.END)
-    entry_r_b.insert(0, "0")
-
-# Função de callback para o evento de rolagem do mouse
-def on_mousewheel(event):
-    if event.delta > 0:
-        canvas.yview_scroll(-1, "units")
-    else:
-        canvas.yview_scroll(1, "units")
-
 # Configuração da janela principal
 root = tk.Tk()
-root.title("Calculadora")
+root.title("Simulador de CPU")
 
-# Interface para barramento A
-frame_a = tk.Frame(root)
-frame_a.grid(row=0, column=0, padx=10, pady=10)
 
-label_barramento_a = tk.Label(frame_a, text="Barramento A")
-label_barramento_a.pack()
+ula_estado_operacao = tk.StringVar()
 
-entry_r_a = tk.Entry(frame_a, width=10)
-entry_r_a.pack()
+# Função chamada quando um botão de seleção de operação for clicado
 
-# Interface para barramento B
-frame_b = tk.Frame(root)
-frame_b.grid(row=0, column=1, padx=10, pady=10)
 
-label_barramento_b = tk.Label(frame_b, text="Barramento B")
-label_barramento_b.pack()
+def selecionar_operacao(operacao):
+    ula_estado_operacao.set(operacao)
 
-entry_r_b = tk.Entry(frame_b, width=10)
-entry_r_b.pack()
+# Função para atualizar a interface gráfica quando os botões forem clicados
 
-# Interface para resultado
-frame_resultado = tk.Frame(root)
-frame_resultado.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
 
-label_resultado = tk.Label(frame_resultado, text="Resultado")
-label_resultado.pack()
+def update_interface():
+    barramento_a = barramento_a_var.get()
+    barramento_b = barramento_b_var.get()
+    barramento_c = barramento_c_var.get()
+    # Obtém o estado da operação selecionada na ULA
+    operacao = ula_estado_operacao.get()
+    resultado 
 
-entry_valor = tk.Entry(frame_resultado, width=10)
-entry_valor.pack()
+    # Executar a operação correspondente na ULA e atualizar os registradores
+    if operacao == "adicao":
+        resultado = int(barramento_a) + int(barramento_b)
+    elif operacao == "subtracao":
+        resultado = int(barramento_a) - int(barramento_b)
+    elif operacao == "multiplicacao":
+        resultado = int(barramento_a) * int(barramento_b)
+    elif operacao == "divisao":
+        resultado = int(barramento_a) / int(barramento_b)
 
-# Barra de status para exibir o barramento atual
-barramento_atual = tk.StringVar()
-label_status = tk.Label(root, textvariable=barramento_atual, bd=1, relief=tk.SUNKEN, anchor=tk.W)
-label_status.grid(row=2, column=0, columnspan=2, sticky=tk.W+tk.E)
+    # Atualizar os valores nos registradores de acordo com o resultado da operação
+    if barramento_c == "R0":
+        r0_entry.delete(0, tk.END)
+        r0_entry.insert(0, str(resultado))
+    elif barramento_c == "R1":
+        r1_entry.delete(0, tk.END)
+        r1_entry.insert(0, str(resultado))
+    elif barramento_c == "R2":
+        r2_entry.delete(0, tk.END)
+        r2_entry.insert(0, str(resultado))
+    elif barramento_c == "R3":
+        r3_entry.delete(0, tk.END)
+        r3_entry.insert(0, str(resultado))
 
-# Configurações iniciais
-entry_r_a.insert(0, "0")
-entry_r_b.insert(0, "0")
-entry_valor.insert(0, "0")
-barramento_atual.set("A")
 
-# Configuração do evento de rolagem do mouse na interface do barramento B
-canvas = tk.Canvas(frame_b, height=100)
-canvas.pack(side=tk.LEFT, fill=tk.Y)
-scrollbar = tk.Scrollbar(frame_b, orient=tk.VERTICAL, command=canvas.yview)
-scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-canvas.configure(yscrollcommand=scrollbar.set)
-canvas.bind_all("<MouseWheel>", on_mousewheel)
-canvas.create_window((0,0), window=entry_r_b)
-label_barramento_c.config(relief=tk.RAISED)
-update_canvas()
+# Função para resetar o simulador ao estado inicial
+def reset():
+    r0_entry.delete(0, tk.END)
+    r1_entry.delete(0, tk.END)
+    r2_entry.delete(0, tk.END)
+    r3_entry.delete(0, tk.END)
 
-#Função de callback para a seleção do barramento C
-def selecionar_barramento_c():
-barramento_atual.set("C")
-label_barramento_a.config(relief=tk.RAISED)
-label_barramento_b.config(relief=tk.RAISED)
-label_barramento_c.config(relief=tk.SUNKEN)
-update_canvas()
 
-#Função de callback para o botão Somar
-def somar():
-resultado.set(int(entry_r0.get()) + int(entry_r1.get()) + int(entry_r2.get()) + int(entry_r3.get()))
+# Criação das caixas de texto para os registradores
+r0_label = tk.Label(root, text="R0:")
+r0_entry = tk.Entry(root)
+r1_label = tk.Label(root, text="R1:")
+r1_entry = tk.Entry(root)
+r2_label = tk.Label(root, text="R2:")
+r2_entry = tk.Entry(root)
+r3_label = tk.Label(root, text="R3:")
+r3_entry = tk.Entry(root)
 
-#Função de callback para o botão Resetar
-def resetar():
-entry_r0.delete(0, tk.END)
-entry_r1.delete(0, tk.END)
-entry_r2.delete(0, tk.END)
-entry_r3.delete(0, tk.END)
-resultado.set(0)
+# Criação das caixas de seleção para os barramentos
+barramento_a_label = tk.Label(root, text="Barramento A:")
+barramento_a_var = tk.StringVar(root)
+barramento_a_var.set("R0")
+barramento_a_optionmenu = tk.OptionMenu(
+    root, barramento_a_var, "R0", "R1", "R2", "R3")
+barramento_b_label = tk.Label(root, text="Barramento B:")
+barramento_b_var = tk.StringVar(root)
+barramento_b_var.set("R0")
+barramento_b_optionmenu = tk.OptionMenu(
+    root, barramento_b_var, "R0", "R1", "R2", "R3")
+barramento_c_label = tk.Label(root, text="Barramento C:")
+barramento_c_var = tk.StringVar(root)
+barramento_c_var.set("R0")
+barramento_c_optionmenu = tk.OptionMenu(
+    root, barramento_c_var, "R0", "R1", "R2", "R3")
 
-#Criação dos widgets para a interface principal
-root = tk.Tk()
-root.title("Interface Principal")
+# Criação dos botões de seleção de operação da ULA
+ula_adicao = tk.Button(root, text="Adição")
+ula_subtracao = tk.Button(root, text="Subtração")
+ula_multiplicacao = tk.Button(root, text="Multiplicação")
+ula_divisao = tk.Button(root, text="Divisão")
 
-canvas = tk.Canvas(root)
-canvas.grid(row=0, column=0, columnspan=3)
+# Criação do botão de execução
+executar = tk.Button(root, text="Executar", command=update_interface)
 
-scrollbar = tk.Scrollbar(root, orient="vertical", command=canvas.yview)
-scrollbar.grid(row=0, column=3, sticky=tk.NS)
+# Criação do botão de reset
+resetar = tk.Button(root, text="Resetar", command=reset)
 
-canvas.configure(yscrollcommand=scrollbar.set)
-canvas.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+# Posicionamento dos elementos na interface gráfica usando grid
+r0_label.grid(row=0, column=0, sticky="e")
+r0_entry.grid(row=0, column=1)
+r1_label.grid(row=1, column=0, sticky="e")
+r1_entry.grid(row=1, column=1)
+r2_label.grid(row=2, column=0, sticky="e")
+r2_entry.grid(row=2, column=1)
+r3_label.grid(row=3, column=0, sticky="e")
+r3_entry.grid(row=3, column=1)
+barramento_a_label.grid(row=0, column=2, sticky="e")
+barramento_a_optionmenu.grid(row=0, column=3)
+barramento_b_label.grid(row=1, column=2, sticky="e")
+barramento_b_optionmenu.grid(row=1, column=3)
+barramento_c_label.grid(row=2, column=2, sticky="e")
+barramento_c_optionmenu.grid(row=2, column=3)
+ula_adicao.grid(row=4, column=0)
+ula_subtracao.grid(row=4, column=1)
+ula_multiplicacao.grid(row=4, column=2)
+ula_divisao.grid(row=4, column=3)
+executar.grid(row=5, column=0, columnspan=2)
+resetar.grid(row=5, column=2, columnspan=2)
 
-frame_registradores = tk.Frame(canvas)
-canvas.create_window((0,0), window=frame_registradores, anchor=tk.W)
-
-label_r0 = tk.Label(frame_registradores, text="R0:")
-label_r0.grid(row=0, column=0)
-entry_r0 = tk.Entry(frame_registradores)
-entry_r0.grid(row=0, column=1)
-
-label_r1 = tk.Label(frame_registradores, text="R1:")
-label_r1.grid(row=1, column=0)
-entry_r1 = tk.Entry(frame_registradores)
-entry_r1.grid(row=1, column=1)
-
-label_r2 = tk.Label(frame_registradores, text="R2:")
-label_r2.grid(row=2, column=0)
-entry_r2 = tk.Entry(frame_registradores)
-entry_r2.grid(row=2, column=1)
-
-label_r3 = tk.Label(frame_registradores, text="R3:")
-label_r3.grid(row=3, column=0)
-entry_r3 = tk.Entry(frame_registradores)
-entry_r3.grid(row=3, column=1)
-
-label_resultado = tk.Label(frame_registradores, text="Resultado:")
-label_resultado.grid(row=4, column=0)
-entry_resultado = tk.Entry(frame_registradores, state=tk.DISABLED)
-entry_resultado.grid(row=4, column=1)
-
-#Criação dos botões para seleção do barramento
-barramento_atual = tk.StringVar()
-label_barramento_a = tk.Label(frame_registradores, text="Barramento A", relief=tk.SUNKEN, width=15, anchor=tk.W)
-label_barramento_a.grid(row=5, column=0, pady=5)
-label_barramento_b = tk.Label(frame_registradores, text="Barramento B", relief=tk.RAISED, width=15, anchor=tk.W)
-label_barramento_b.grid(row=5, column=1, pady=5)
-label_barramento_c = tk.Label(frame_registradores, text="Barramento C", relief=tk.RAISED, width=15, anchor=tk.W)
-label_barramento_c.grid(row=5, column=2, pady=5)
-
-#Configuração dos callbacks para os eventos de clique nos botões de barramento
-label_barramento_a.bind("<Button-1>", selecionar_barramento_a)
-label_barramento_b.bind("<Button-1>", selecionar_barramento_b)
-label_barramento_c.bind("<Button-1>", selecionar_barramento_c)
-
-#Criação dos botões para somar e resetar
-btn_somar = tk.Button(frame_registradores, text="Somar", command=somar)
-btn_somar.grid(row=6, column=0, columnspan=2, pady=10)
-
-btn_resetar = tk.Button(frame_registradores, text="Resetar", command=resetar)
-btn_resetar.grid(row=6, column=2, pady=10)
-
-#Variável para armazenar o resultado da soma
-resultado = tk.StringVar()
-resultado.set(0)
-
-#Função auxiliar para atualizar o canvas
-def update_canvas():
-canvas.update_idletasks()
-canvas.configure(scrollregion=canvas.bbox("all"))
-
+# Iniciar loop de eventos da interface gráfica
 root.mainloop()

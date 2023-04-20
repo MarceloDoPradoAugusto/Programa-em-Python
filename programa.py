@@ -4,68 +4,179 @@ import tkinter as tk
 root = tk.Tk()
 root.title("Simulador de CPU")
 
-
-ula_estado_operacao = tk.StringVar()
-
-# Função chamada quando um botão de seleção de operação for clicado
+# Função para resetar o simulador ao estado inicial
 
 
-def selecionar_operacao(operacao):
-    ula_estado_operacao.set(operacao)
+def reset():
+    for entry in r_entries.values():
+        entry.delete(0, tk.END)
+    barramento_a_var.set("R0") # Define o valor padrão do Barramento A como "R0"
+    barramento_b_var.set("R0") # Define o valor padrão do Barramento B como "R0"
+    barramento_c_var.set("R0") # Define o valor padrão do Barramento C como "R0"
 
-# Função para atualizar a interface gráfica quando os botões forem clicados
+# Verifica o valor nos registradores
 
+
+def PeekR():
+    r_values = {}
+    for label in r_labels:
+        r_entry = r_entries[label]
+        value = r_entry.get()  # Obter o valor da caixa de texto
+        # Tentar converter o valor para um número inteiro
+        try:
+            r_value = int(value)
+        except ValueError:
+            # Se a conversão falhar, definir um valor padrão, por exemplo, 0
+            r_value = 0
+        r_values[label] = r_value
+    return r_values
+
+# Função auxiliar para atualizar caixa de texto do registrador
+
+
+def atualizar_caixa_texto(resultado, barramento_c_label, r_entries):
+    if barramento_c_label in r_entries:
+        r_entry = r_entries[barramento_c_label]
+        r_entry.delete(0, tk.END)
+        r_entry.insert(0, str(resultado))
+
+# Função para obter os valores atuais dos registradores
+
+
+def peek_r(r_labels, r_entries):
+    r_values = {}
+    for label in r_labels:
+        r_entry = r_entries[label]
+        value = r_entry.get()  # Obter o valor da caixa de texto
+        # Tentar converter o valor para um número inteiro
+        try:
+            r_value = int(value)
+        except ValueError:
+            # Se a conversão falhar, definir um valor padrão, por exemplo, 0
+            r_value = 0
+        r_values[label] = r_value
+    return r_values
+
+# Criação da variável de operação
+operacao_var = tk.StringVar()
+
+# Função que executará as operações na interface gráfica.
 
 def update_interface():
-    barramento_a = barramento_a_var.get()
-    barramento_b = barramento_b_var.get()
-    barramento_c = barramento_c_var.get()
-    # Obtém o estado da operação selecionada na ULA
-    operacao = ula_estado_operacao.get()
-    resultado 
+    # Obtém a operação selecionada
+    operacao = operacao_var.get()
 
-    # Executar a operação correspondente na ULA e atualizar os registradores
-    if operacao == "adicao":
-        resultado = int(barramento_a) + int(barramento_b)
-    elif operacao == "subtracao":
-        resultado = int(barramento_a) - int(barramento_b)
-    elif operacao == "multiplicacao":
-        resultado = int(barramento_a) * int(barramento_b)
-    elif operacao == "divisao":
-        resultado = int(barramento_a) / int(barramento_b)
+    # Chama a função correspondente com base na operação selecionada
+    if operacao == "Adição":
+        adicao()
+    elif operacao == "Subtração":
+        subtracao()
+    elif operacao == "Multiplicação":
+        multiplicacao()
+    elif operacao == "Divisão":
+        divisao()
 
-    # Atualizar os valores nos registradores de acordo com o resultado da operação
-    if barramento_c == "R0":
-        r0_entry.delete(0, tk.END)
-        r0_entry.insert(0, str(resultado))
-    elif barramento_c == "R1":
-        r1_entry.delete(0, tk.END)
-        r1_entry.insert(0, str(resultado))
-    elif barramento_c == "R2":
-        r2_entry.delete(0, tk.END)
-        r2_entry.insert(0, str(resultado))
-    elif barramento_c == "R3":
-        r3_entry.delete(0, tk.END)
-        r3_entry.insert(0, str(resultado))
+# Função para realizar a adição
 
 
-# Função para resetar o simulador ao estado inicial
-def reset():
-    r0_entry.delete(0, tk.END)
-    r1_entry.delete(0, tk.END)
-    r2_entry.delete(0, tk.END)
-    r3_entry.delete(0, tk.END)
+def adicao():
+    # Obtém o rótulo do registrador A selecionado
+    barramento_a_label = barramento_a_var.get()
+    # Obtém o rótulo do registrador B selecionado
+    barramento_b_label = barramento_b_var.get()
+    # Obtém o rótulo do registrador C selecionado
+    barramento_c_label = barramento_c_var.get()
+    # Obtém os valores atuais dos registradores
+    r_values = peek_r(r_labels, r_entries)
+    # Obtém o valor correto do registrador A selecionado
+    barramento_a = r_values[barramento_a_label]
+    # Obtém o valor correto do registrador B selecionado
+    barramento_b = r_values[barramento_b_label]
+    resultado = barramento_a + barramento_b  # Realiza a operação
+    # Atualiza o valor do registrador C com o resultado
+    r_values[barramento_c_label] = resultado
+
+    atualizar_caixa_texto(resultado, barramento_c_label, r_entries)
+
+# Função para realizar a subtração
+
+
+def subtracao():
+    # Obtém o rótulo do registrador A selecionado
+    barramento_a_label = barramento_a_var.get()
+    # Obtém o rótulo do registrador B selecionado
+    barramento_b_label = barramento_b_var.get()
+    # Obtém o rótulo do registrador C selecionado
+    barramento_c_label = barramento_c_var.get()
+    # Obtém os valores atuais dos registradores
+    r_values = peek_r(r_labels, r_entries)
+    # Obtém o valor correto do registrador A selecionado
+    barramento_a = r_values[barramento_a_label]
+    # Obtém o valor correto do registrador B selecionado
+    barramento_b = r_values[barramento_b_label]
+    resultado = barramento_a - barramento_b  # Realiza a operação
+    # Atualiza o valor do registrador C com o resultado
+    r_values[barramento_c_label] = resultado
+
+    atualizar_caixa_texto(resultado, barramento_c_label, r_entries)
+
+# Função para realizar a multiplicação
+
+
+def multiplicacao():
+    # Obtém o rótulo do registrador A selecionado
+    barramento_a_label = barramento_a_var.get()
+    # Obtém o rótulo do registrador B selecionado
+    barramento_b_label = barramento_b_var.get()
+    # Obtém o rótulo do registrador C selecionado
+    barramento_c_label = barramento_c_var.get()
+    # Obtém os valores atuais dos registradores
+    r_values = peek_r(r_labels, r_entries)
+    # Obtém o valor correto do registrador A selecionado
+    barramento_a = r_values[barramento_a_label]
+    # Obtém o valor correto do registrador B selecionado
+    barramento_b = r_values[barramento_b_label]
+    resultado = barramento_a * barramento_b  # Realiza a operação
+    # Atualiza o valor do registrador C com o resultado
+    r_values[barramento_c_label] = resultado
+
+    atualizar_caixa_texto(resultado, barramento_c_label, r_entries)
+
+# Função para realizar a divisão
+
+
+def divisao():
+    # Obtém o rótulo do registrador A selecionado
+    barramento_a_label = barramento_a_var.get()
+    # Obtém o rótulo do registrador B selecionado
+    barramento_b_label = barramento_b_var.get()
+    # Obtém o rótulo do registrador C selecionado
+    barramento_c_label = barramento_c_var.get()
+    # Obtém os valores atuais dos registradores
+    r_values = peek_r(r_labels, r_entries)
+    # Obtém o valor correto do registrador A selecionado
+    barramento_a = r_values[barramento_a_label]
+    # Obtém o valor correto do registrador B selecionado
+    barramento_b = r_values[barramento_b_label]
+
+    if barramento_b != 0:
+        # Realiza a operação de divisão inteira
+        resultado = barramento_a // barramento_b
+        # Atualiza o valor do registrador C com o resultado
+        r_values[barramento_c_label] = resultado
+        atualizar_caixa_texto(resultado, barramento_c_label, r_entries)
+    else:
+        # Lidar com erro de divisão por zero
+        tk.messagebox.showerror("Erro", "Divisão por zero não é permitida.")
 
 
 # Criação das caixas de texto para os registradores
-r0_label = tk.Label(root, text="R0:")
-r0_entry = tk.Entry(root)
-r1_label = tk.Label(root, text="R1:")
-r1_entry = tk.Entry(root)
-r2_label = tk.Label(root, text="R2:")
-r2_entry = tk.Entry(root)
-r3_label = tk.Label(root, text="R3:")
-r3_entry = tk.Entry(root)
+r_entries = {}  # Dicionário para armazenar as entradas r_entry
+
+# Lista dos rótulos para as entradas r_entry em maiúsculas
+r_labels = ['R0', 'R1', 'R2', 'R3']
+for label in r_labels:
+    r_entries[label] = tk.Entry(root)
 
 # Criação das caixas de seleção para os barramentos
 barramento_a_label = tk.Label(root, text="Barramento A:")
@@ -84,27 +195,30 @@ barramento_c_var.set("R0")
 barramento_c_optionmenu = tk.OptionMenu(
     root, barramento_c_var, "R0", "R1", "R2", "R3")
 
-# Criação dos botões de seleção de operação da ULA
-ula_adicao = tk.Button(root, text="Adição")
-ula_subtracao = tk.Button(root, text="Subtração")
-ula_multiplicacao = tk.Button(root, text="Multiplicação")
-ula_divisao = tk.Button(root, text="Divisão")
-
 # Criação do botão de execução
 executar = tk.Button(root, text="Executar", command=update_interface)
+
+# Função para atualizar a variável de operação
+def atualizar_operacao(value):
+    operacao_var.set(value)
+
+# Criação dos botões de seleção de operação da ULA
+ula_adicao = tk.Button(root, text="Adição", command=lambda: atualizar_operacao("Adição"))
+ula_subtracao = tk.Button(root, text="Subtração", command=lambda: atualizar_operacao("Subtração"))
+ula_multiplicacao = tk.Button(root, text="Multiplicação", command=lambda: atualizar_operacao("Multiplicação"))
+ula_divisao = tk.Button(root, text="Divisão", command=lambda: atualizar_operacao("Divisão"))
+
 
 # Criação do botão de reset
 resetar = tk.Button(root, text="Resetar", command=reset)
 
 # Posicionamento dos elementos na interface gráfica usando grid
-r0_label.grid(row=0, column=0, sticky="e")
-r0_entry.grid(row=0, column=1)
-r1_label.grid(row=1, column=0, sticky="e")
-r1_entry.grid(row=1, column=1)
-r2_label.grid(row=2, column=0, sticky="e")
-r2_entry.grid(row=2, column=1)
-r3_label.grid(row=3, column=0, sticky="e")
-r3_entry.grid(row=3, column=1)
+for i, label in enumerate(r_labels):
+    r_label = tk.Label(root, text=label.upper() + ":")
+    r_entry = r_entries[label]
+    r_label.grid(row=i, column=0, sticky="e")
+    r_entry.grid(row=i, column=1)
+
 barramento_a_label.grid(row=0, column=2, sticky="e")
 barramento_a_optionmenu.grid(row=0, column=3)
 barramento_b_label.grid(row=1, column=2, sticky="e")
@@ -117,6 +231,7 @@ ula_multiplicacao.grid(row=4, column=2)
 ula_divisao.grid(row=4, column=3)
 executar.grid(row=5, column=0, columnspan=2)
 resetar.grid(row=5, column=2, columnspan=2)
+
 
 # Iniciar loop de eventos da interface gráfica
 root.mainloop()

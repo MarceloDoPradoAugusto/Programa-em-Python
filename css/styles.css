@@ -1,0 +1,119 @@
+.header {
+    background-color: turquoise;
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .left-section {
+    display: inline-block;
+    width: 50%;
+    float: left;
+  }
+  
+  .right-section {
+    display: inline-block;
+    width: 50%;
+    float: right;
+  }
+  .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .column {
+    width: 48%;
+  }
+
+  .blue-box {
+    background-color: #007bff; /* Cor de fundo azul */
+    border-left: 5px solid black; /* Borda preta de 5px à esquerda */
+    padding: 10px; /* Adiciona espaçamento interno de 10px */
+    width: 150px; /* Largura desejada */
+    height: 200px; /* Altura desejada */
+    display: flex; /* Exibe os registros em uma única linha */
+    flex-direction: column; /* Coloca os registros em coluna */
+    justify-content: center; /* Centraliza os registros verticalmente */
+    align-items: center; /* Centraliza os registros horizontalmente */
+  }
+  
+  .registers {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; /* Espaço igual entre os registros */
+  }
+  
+  .register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px; /* Espaçamento entre os registros */
+  }
+  
+  .register-text {
+    font-weight: bold;
+    color: white; /* Cor do texto branco para contraste com o fundo azul */
+    margin-right: 10px; /* Espaçamento entre o texto e a caixa de entrada */
+  }
+  
+  .register-input {
+    width: 100px; /* Largura desejada para a caixa de entrada */
+  }
+
+  
+
+
+
+  .barramentos-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    height: 400px; /* ou qualquer outra altura desejada */
+    margin-right: 70px;
+  }
+
+  .bus-container {
+    border: 1px solid black; /* Adiciona borda preta de 1px */
+    border-radius: 5px; /* Adiciona bordas arredondadas */
+    padding: 10px; /* Adiciona espaçamento interno de 10px */
+    margin-right: 0px;
+    height: 200px;
+    width: 150px;
+  }
+  
+  
+  .bus-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .bus-box .bus-text {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+    border: 1px solid black; /* borda para separar a caixa */
+    padding: 5px;
+  }
+  
+  .bus-box .register-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .bus-box .register-button {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    transition: background-color 0.3s;
+    margin: 0 5px;
+  }
+  
+  .bus-box .register-button:hover {
+    background-color: green;
+  }
